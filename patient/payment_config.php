@@ -11,7 +11,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $RETURN_URL = $row['success'];
     $CANCEL_URL = $row['cancel'];
     $NOTIFY_URL = $row['ipn'];
-    $fee = $row['fee'];
+    // $fee = $row['fee'];
 }
 $currency = 'PHP';
 $local_certificate = FALSE;

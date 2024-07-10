@@ -7,6 +7,28 @@ include('../admin/config/dbconn.php');
 include('payment_config.php');
 ?>
 
+
+<!-- Modal -->
+<div class="modal fade" id="appointment-summary-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Appointment Summary</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- summary will be displayed here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmBtn">Confirm Appointment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <div class="content-wrapper">
@@ -27,7 +49,7 @@ include('payment_config.php');
 
             <div class="content">
                 <div class="container-fluid">
-                    <form action="request_action.php" method="post">
+                    <form id="appointment_request" method="post">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="card">
@@ -92,8 +114,9 @@ include('payment_config.php');
                                                 if (mysqli_num_rows($query_run) > 0) {
                                                     foreach ($query_run as $row) {
                                                 ?>
-                                                        <option value="<?php echo $row['procedures']; ?>">
-                                                            <?php echo $row['procedures']; ?></option>
+                                                        <option value="<?php echo $row['procedures']; ?>" data-price="<?php echo $row['price']; ?>">
+                                                            <?php echo $row['procedures']; ?>
+                                                        </option>
                                                 <?php
                                                     }
                                                 }
@@ -134,9 +157,11 @@ include('payment_config.php');
                                         ?>
                                     </div>
                                 </div>
+                                <input type="hidden" name="insertdata" value="1">
+                                <input type="hidden" name="totalAmount" id="totalAmount" value="">
                                 <div class="row">
                                     <div class="col-sm-12 mb-3">
-                                        <button type="submit" class="btn btn-primary" name="insertdata" id="checkBtn">Request Appointment</button>
+                                        <button type="button" id="request-appointment" class="btn btn-primary">Request Appointment</button>
                                     </div>
                                 </div>
                             </div>
@@ -150,110 +175,158 @@ include('payment_config.php');
         <?php include('includes/scripts.php'); ?>
         <script>
             $(document).ready(function() {
-                // $('#checkBtn').click(function() {
-                //     checked = $("input[type=checkbox]:checked").length;
+                // Function to initialize Select2 with custom settings
+                function initializeSelect2(id, placeholder, allowClear = true, ajaxSettings = null) {
+                    var select2Config = {
+                        placeholder: placeholder,
+                        allowClear: allowClear,
+                    };
 
-                //     if(!checked) {
-                //         alert("Please, check at least one concern");
-                //         return false;
-                //     }
-                // });
-                $('.select2').select2();
-                $(".dentist").select2({
-                    placeholder: "Select Dentist",
-                    allowClear: true
-                });
-                $("#preferredDate").select2({
-                    placeholder: "Available Date",
-                    allowClear: true
-                });
-                $("#service").select2({
-                    placeholder: "Services",
-                    allowClear: true
-                });
-                $("#preferredTime").select2({
-                    placeholder: "Available Time",
-                    allowClear: true
-                });
+                    if (ajaxSettings) {
+                        select2Config.ajax = ajaxSettings;
+                    }
+
+                    $(id).select2(select2Config);
+                }
+
+                // Initialize Select2 for each element with custom settings
+                initializeSelect2('.select2', 'Select an option');
+                initializeSelect2('.dentist', 'Select Dentist');
+                initializeSelect2('#preferredDate', 'Available Date');
+                initializeSelect2('#service', 'Services');
+                initializeSelect2('#preferredTime', 'Available Time');
+
                 $("#preferredDentist").on("change", function() {
                     var selectedDentistId = $("#preferredDentist").val();
                     $('#preferredDate').val('');
                     $('#preferredTime').val(null).trigger('change');
-                    $('#preferredDate').select2({
-                        allowClear: true,
-                        placeholder: "Available Date",
-                        ajax: {
-                            url: 'request_action.php',
-                            type: 'GET',
-                            dataType: 'json',
-                            delay: 250,
-                            data: function(params) {
-                                return {
-                                    doctorIdDate: selectedDentistId,
-                                    patientId: <?php echo $_SESSION['auth_user']['user_id']; ?>
-                                };
-                            },
-                            processResults: function(response) {
-                                return {
-                                    results: response
-                                };
-                            },
-                            cache: true,
-                        }
-                    }).on('change', function(e) {
+
+                    initializeSelect2('#preferredDate', 'Available Date', true, {
+                        url: 'request_action.php',
+                        type: 'GET',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                doctorIdDate: selectedDentistId,
+                                patientId: <?php echo $_SESSION['auth_user']['user_id']; ?>
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        cache: true,
+                    });
+
+                    $('#preferredDate').on('change', function(e) {
                         $("#service").val(null).trigger("change");
                         var data = $(this).select2('data')[0] ?? '';
                         var infoValue = data.info ?? '';
                         console.log(infoValue);
 
-                        var select2Config = {
-                            allowClear: true,
-                            placeholder: "Select Service"
-                        };
-
-                        if (infoValue == 30) {
-                            select2Config.minimumResultsForSearch = Infinity;
-                            select2Config.maximumSelectionLength = 1;
-                        } else if (infoValue == 60) {
-                            select2Config.minimumResultsForSearch = Infinity;
-                            select2Config.maximumSelectionLength = 2;
-                        } else if (infoValue == 120) {
-                            select2Config.minimumResultsForSearch = Infinity;
-                            select2Config.maximumSelectionLength = 4;
-                        } else if (infoValue == 180) {
-                            select2Config.minimumResultsForSearch = Infinity;
-                            select2Config.maximumSelectionLength = 6;
-                        }
-
-                        // Update select2 configuration options for service select box
-                        $('#service').select2('destroy').select2(select2Config);
+                        initializeSelect2('#service', 'Select Service');
                     });
                 });
+
                 $("#preferredDate").on("change", function() {
                     var selectedSchedId = $("#preferredDate").val();
                     $('#preferredTime').val('');
-                    $('#preferredTime').select2({
-                        allowClear: true,
-                        placeholder: "Available Date",
-                        ajax: {
-                            url: 'request_action.php',
-                            type: 'POST',
-                            dataType: 'json',
-                            delay: 250,
-                            data: function(params) {
-                                return {
-                                    selectedDateId: selectedSchedId,
-                                };
-                            },
-                            processResults: function(response) {
-                                return {
-                                    results: response
-                                };
-                            },
-                            cache: true,
+
+                    initializeSelect2('#preferredTime', 'Available Time', true, {
+                        url: 'request_action.php',
+                        type: 'POST',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                selectedDateId: selectedSchedId,
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        cache: true,
+                    });
+                });
+
+                $('#request-appointment').on('click', function() {
+                    var services = [];
+                    var totalAmount = 0;
+                    $('#service').select2('data').forEach(function(service) {
+                        services.push({
+                            name: service.text,
+                            price: $(service.element).data('price')
+                        });
+                        totalAmount += $(service.element).data('price');
+                    });
+                    $('#totalAmount').val(totalAmount);
+
+                    var doctor = $('#preferredDentist').select2('data')[0].text;
+                    var date = $('#preferredDate').select2('data')[0].text;
+                    var time = $('#preferredTime').select2('data')[0].text;
+
+                    var modalContent = `
+            <table class="table table-bordered">
+                <tr>
+                    <th>Doctor:</th>
+                    <td>${doctor}</td>
+                </tr>
+                <tr>
+                    <th>Date:</th>
+                    <td>${date}</td>
+                </tr>
+                <tr>
+                    <th>Time:</th>
+                    <td>${time}</td>
+                </tr>
+                <tr>
+                    <th>Services:</th>
+                    <td>
+                        <ul>
+                            ${services.map(function(service) {
+                                return `<li>${service.name} - <span class="float-right">₱ ${service.price}</span></li>`;
+                            }).join('')}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Total Amount:</th>
+                    <td><strong class="float-right">₱ ${totalAmount}</strong></td>
+                </tr>
+            </table>
+        `;
+
+                    $('#modal-body').html(modalContent);
+                    $('#appointment-summary-modal').modal('show');
+                });
+
+                $('#confirmBtn').on('click', function() {
+                    var formData = $('#appointment_request').serialize();
+
+                    $.ajax({
+                        url: 'request_action.php',
+                        type: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            var res = JSON.parse(response);
+
+                            if (res.status == 'success') {
+                                window.location.href = res.redirect_url;
+                            } else {
+                                alert('Error confirming appointment: ' + res.message);
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            alert('Error confirming appointment: ' + textStatus + ' ' + errorThrown);
                         }
                     });
                 });
             });
         </script>
+
         <?php include('includes/footer.php'); ?>

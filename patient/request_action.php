@@ -13,6 +13,7 @@ if (isset($_POST['insertdata'])) {
     $doctor_id = $_POST['preferredDentist'];
     $sched_id = $_POST['preferredDate'];
     $selectedTime = $_POST['preferredTime'];
+    $totalAmount = $_POST['totalAmount'];
     $preferredTime = explode("-", $selectedTime);
     $schedStart = $preferredTime[0];
     $schedEnd = $preferredTime[1];
@@ -65,7 +66,7 @@ if (isset($_POST['insertdata'])) {
     if ($query_run) {
         $data = array(
             'cmd'            => '_xclick',
-            'amount'        => $fee,
+            'amount'        => $totalAmount,
             'item_number' => $_SESSION['auth_user']['user_id'],
             'item_name' => 'Appointment Fee',
             'business'         => $paypal_email,
@@ -75,14 +76,21 @@ if (isset($_POST['insertdata'])) {
             'custom' => $last_id,
             'return'        => $RETURN_URL
         );
-        header('location:' . $paypal_url . '?' . http_build_query($data));
+
+        $redirect_url = $paypal_url . '?' . http_build_query($data);
+
+        echo json_encode([
+            'status' => 'success',
+            'redirect_url' => $redirect_url
+        ]);
     } else {
-        $_SESSION['error'] = "Appointment Submission Failed";
-        header('Location: index.php');
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Appointment Submission Failed'
+        ]);
     }
 
-    $sql = "INSERT INTO notification (patient_id,doc_id,subject,created_at) VALUES ('$patient_id','$doctor_id','$subject','$date_submitted')";
-    $query_run = mysqli_query($conn, $sql);
+    exit();
 }
 
 if (isset($_POST['cancel-appointment'])) {
