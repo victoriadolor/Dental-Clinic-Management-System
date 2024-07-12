@@ -257,13 +257,15 @@ include('payment_config.php');
                     var services = [];
                     var totalAmount = 0;
                     $('#service').select2('data').forEach(function(service) {
+                        var priceString = $(service.element).data('price'); 
+                        var priceNumber = parseFloat(priceString.replace(',', '')); 
                         services.push({
                             name: service.text,
-                            price: $(service.element).data('price')
+                            price: priceNumber
                         });
-                        totalAmount += $(service.element).data('price');
+                        totalAmount += priceNumber; 
                     });
-                    $('#totalAmount').val(totalAmount);
+                    $('#totalAmount').val(totalAmount.toFixed(2)); 
 
                     var doctor = $('#preferredDentist').select2('data')[0].text;
                     var date = $('#preferredDate').select2('data')[0].text;
