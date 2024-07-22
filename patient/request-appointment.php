@@ -258,7 +258,10 @@ include('payment_config.php');
                     var totalAmount = 0;
                     $('#service').select2('data').forEach(function(service) {
                         var priceString = $(service.element).data('price'); 
+                        priceString = priceString.toString(); 
+                        
                         var priceNumber = parseFloat(priceString.replace(',', '')); 
+                        
                         services.push({
                             name: service.text,
                             price: priceNumber
@@ -290,7 +293,7 @@ include('payment_config.php');
                     <td>
                         <ul>
                             ${services.map(function(service) {
-                                return `<li>${service.name} - <span class="float-right">₱ ${service.price}</span></li>`;
+                                return `<li>${service.name}  <span class="float-right">₱ ${service.price}</span></li>`;
                             }).join('')}
                         </ul>
                     </td>

@@ -8,9 +8,31 @@ include('../../config/dbconn.php');
 
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
+
+    <!-- Modal -->
+    <div class="modal fade" id="appointment-summary-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Appointment Summary</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modal-body">
+            <!-- summary will be displayed here -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel-btn">Cancel</button>
+            <button type="button" class="btn btn-primary" id="confirm-btn">Confirm Appointment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Add Modal -->
-    <div class="modal fade" id="AddAppointmentModal">
-      <div class="modal-dialog">
+    <div class="modal fade" id="AddAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Add Appointment</h4>
@@ -19,9 +41,11 @@ include('../../config/dbconn.php');
             </button>
           </div>
 
-          <form action="appointment_action.php" method="POST">
+          <form id="add-appointment-form">
             <div class="modal-body">
               <div class="row">
+              <input type="hidden" name="insert_appointment" value="1">
+                <input type="hidden" name="totalAmount" id="totalAmount" value="">
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Select Patient</label>
@@ -103,8 +127,9 @@ include('../../config/dbconn.php');
                       if (mysqli_num_rows($query_run) > 0) {
                         foreach ($query_run as $row) {
                       ?>
-                          <option value="<?php echo $row['procedures']; ?>">
-                            <?php echo $row['procedures']; ?></option>
+                          <option value="<?php echo $row['procedures']; ?>" data-price="<?php echo $row['price']; ?>">
+                            <?php echo $row['procedures']; ?>
+                          </option>
                       <?php
                         }
                       }
@@ -147,7 +172,7 @@ include('../../config/dbconn.php');
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" name="insert_appointment" class="btn btn-primary">Submit</button>
+              <button type="submit" id="submit-btn" class="btn btn-primary">Request Appointment</button>
             </div>
           </form>
         </div>
@@ -378,6 +403,7 @@ include('../../config/dbconn.php');
               <?php
               include('../../message.php');
               ?>
+              <div id="message"></div>
               <div class="card card-primary card-outline">
                 <div class="card-header">
                   <h3 class="card-title">Appointment List</h3>

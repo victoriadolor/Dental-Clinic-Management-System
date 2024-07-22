@@ -13,6 +13,16 @@ use PHPMailer\PHPMailer\PHPMailer;
 use Twilio\Exceptions\TwilioException;
 
 require '../../../vendor/autoload.php';
+function random_strings($length_of_string)
+{
+    $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    return substr(
+        str_shuffle($str_result),
+        0,
+        $length_of_string
+    );
+}
+
 function sendTextMessage($patient_name, $patient_phone, $text)
 {
     include('../../config/dbconn.php');
@@ -36,7 +46,7 @@ function sendTextMessage($patient_name, $patient_phone, $text)
             ]
         );
     } catch (TwilioException $e) {
-        echo $e->getCode();
+        // echo $e->getCode();
     }
 }
 function sendEmail($patient_name, $patient_email, $patient_date, $patient_time, $patient_phone, $treatment, $date_submission, $mail_username, $mail_host, $mail_password, $system_name)
@@ -73,9 +83,9 @@ function sendEmail($patient_name, $patient_email, $patient_date, $patient_time, 
 
     try {
         $mail->send();
-        echo "Message has been sent";
+        // echo "Message has been sent";
     } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }
 function cancelledEmail($patient_name, $patient_email, $patient_date, $patient_time, $patient_phone, $treatment, $date_submission, $mail_username, $mail_host, $mail_password, $system_name, $mobile)
@@ -117,6 +127,7 @@ function cancelledEmail($patient_name, $patient_email, $patient_date, $patient_t
 }
 
 if (isset($_POST['insert_appointment'])) {
+
     $services = '';
     $patient_id = $_POST['select_patient'];
     $doctor_id = $_POST['select_dentist'];
@@ -133,7 +144,18 @@ if (isset($_POST['insert_appointment'])) {
     $bgcolor = $_POST['color'];
     $schedtype = 'Walk-in Schedule';
     $date_submitted = date('Y-m-d H:i:s');
-    $send_email = $_POST['send-email'];
+    $send_email = $_POST['send-email'] ?? '';
+
+    $totalAmount = $_POST['totalAmount'];
+    $payment = 1;
+    $payment_option = 'cash';
+    $ref_id = strtoupper(random_strings(12));
+    $payment_status = 'Completed';
+    $privilegeCard = $_POST['privilegeCard']; 
+    if ($privilegeCard == 'on') {
+        $discount = $totalAmount * 0.10;
+        $totalAmount -= $discount;
+    }
 
     $sql = "SELECT * FROM tblpatient WHERE id='$patient_id'";
     $query_run = mysqli_query($conn, $sql);
@@ -151,9 +173,17 @@ if (isset($_POST['insert_appointment'])) {
         }
     }
 
-    $sql = "INSERT INTO tblappointment (patient_id,patient_name,doc_id,schedule,starttime,endtime,sched_id,reason,schedtype,status,bgcolor,created_at)
-        VALUES ('$patient_id','$patient_name','$doctor_id','$schedule','$s_time','$e_time','$schedule_id','$treatment','$schedtype','$status','$bgcolor','$date_submitted')";
+    $sql = "INSERT INTO tblappointment (patient_id,patient_name,doc_id,schedule,starttime,endtime,sched_id,reason,schedtype,status,payment,payment_option,bgcolor,created_at)
+        VALUES ('$patient_id','$patient_name','$doctor_id','$schedule','$s_time','$e_time','$schedule_id','$treatment','$schedtype','$status','$payment','$payment_option','$bgcolor','$date_submitted')";
     $query_run = mysqli_query($conn, $sql);
+    if ($query_run) {
+        $appointment_id = mysqli_insert_id($conn);
+        $sql = "INSERT INTO payments(patient_id,app_id,ref_id,payment_status,amount,method,created_at) 
+        VALUES('$patient_id','$appointment_id','$ref_id','$payment_status','$totalAmount','$payment_option','$date_submitted')";
+        $query_run = mysqli_query($conn, $sql);
+    } 
+    
+
 
     $sql = "SELECT * from system_details";
     $query_run = mysqli_query($conn, $sql);
@@ -187,11 +217,16 @@ if (isset($_POST['insert_appointment'])) {
             sendEmail($patient_name, $patient_email, $patient_date, $patient_time, $patient_phone, $treatment, $date_submission, $mail_username, $mail_host, $mail_password, $system_name);
         }
 
-        $_SESSION['success'] = "Appointment Added Successfully";
-        header('Location:index.php');
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Appointment Added Successfully'
+        ]);
+
     } else {
-        $_SESSION['error'] = "Appointment Failed to Add";
-        header('Location:index.php');
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Appointment Submission Failed'
+        ]);
     }
 }
 

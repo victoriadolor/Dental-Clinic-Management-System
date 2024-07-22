@@ -293,6 +293,7 @@ include('../admin/config/dbconn.php');
                         <th class="export">Gender</th>
                         <th class="export">Contact</th>
                         <th class="export">Email</th>
+                        <th class="export">Privilege Card</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -304,6 +305,7 @@ include('../admin/config/dbconn.php');
                         <th class="search">Gender</th>
                         <th class="search">Contact</th>
                         <th class="search">Email</th>
+                        <th></th>
                         <th></th>
                       </tr>
                     </tfoot>
@@ -414,6 +416,16 @@ include('../admin/config/dbconn.php');
           "data": "email"
         },
         {
+          "data": 'card',
+          render: function(data, type, row) {
+            if (data == 1) {
+              return '<button data-id="' + row.id + '" data-status="' + data + '" class="btn btn-sm btn-primary activatebtn">Active</button>';
+            } else {
+              return '<button data-id="' + row.id + '" data-status="' + data + '" class="btn btn-sm btn-danger activatebtn">Inactive</button>';
+            }
+          }
+        },
+        {
           "data": 'id',
           render: function(data, type, row) {
             return '<a href="patient-details.php?id=' + data + '" class="btn btn-sm btn-secondary"><i class="fa fa-eye"></i></a> <button data-id="' + data + '" class="btn btn-sm btn-info editbtn"><i class="fas fa-edit"></i></button> <input type="hidden" name="del_image" value="' + row.image + '"><button data-id="' + data + '" class="btn btn-danger btn-sm deletebtn"><i class="far fa-trash-alt"></i></button>';
@@ -493,6 +505,31 @@ include('../admin/config/dbconn.php');
         $('#delete_id').val(user_id);
         $('#deletemodal').modal('show');
 
+      });
+
+      $(document).on('click', '.activatebtn', function() {
+        var userid = $(this).data('id');
+        var status = $(this).data('status');
+        var next_status = 'Active';
+        if (status == 1) {
+          next_status = 'Inactive';
+        }
+
+        if (confirm("Are you sure you want to " + next_status + " privilege card to this user?")) {
+          $.ajax({
+            type: "post",
+            url: "patient_action.php",
+            data: {
+              'change_status': true,
+              'user_id': userid,
+              'status': status,
+              'next_status': next_status
+            },
+            success: function(response) {
+              location.reload();
+            }
+          });
+        }
       });
     });
   </script>

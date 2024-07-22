@@ -13,6 +13,7 @@
         array( 'db' => 'gender',  'dt' => 'gender' ),
         array( 'db' => 'phone',   'dt' => 'phone' ),
         array( 'db' => 'email',  'dt' => 'email' ),
+        array( 'db' => 'card',  'dt' => 'card'),
         array( 'db' => 'id',   'dt' => 'id' ),
     );
     

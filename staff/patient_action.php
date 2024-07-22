@@ -4,6 +4,30 @@
 
     date_default_timezone_set("Asia/Manila");
 
+    if (isset($_POST['change_status'])) {
+        $id = $_POST['user_id'];
+        $status = $_POST['next_status'];
+        $new_status = '';
+    
+        if ($status == "Inactive") {
+            $new_status = 0;
+        }
+        if ($status == "Active") {
+            $new_status = 1;
+        }
+    
+        $sql = "UPDATE tblpatient set card='$new_status' WHERE id='$id' ";
+        $query_run = mysqli_query($conn, $sql);
+    
+        if ($query_run) {
+            $_SESSION['success'] = "Patient privilege card change successfully";
+            header('Location:index.php');
+        } else {
+            $_SESSION['error'] = "Failed to change privilege card";
+            header('Location:index.php');
+        }
+    }
+    
     if(isset($_POST['insertpatient']))
     {  
         $fname  = $_POST['fname'];
