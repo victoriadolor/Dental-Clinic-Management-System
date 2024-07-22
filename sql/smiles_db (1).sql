@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 10, 2023 at 09:15 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.1.12
+-- Generation Time: Jul 22, 2024 at 02:51 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -39,7 +39,7 @@ CREATE TABLE `about` (
 --
 
 INSERT INTO `about` (`id`, `title`, `image`, `content`) VALUES
-(1, 'Know More About Pipo Esthetique Dental Center', '1658238926.jpg', '<p><font color=\"#222222\" face=\"Open Sans\">Pipo Esthetique Dental Center</font><span style=\"color: rgb(34, 34, 34); font-family: &quot;Open Sans&quot;;\">&nbsp;isn’t just another place to see a dentist in Laguna.</span><span style=\"color: rgb(34, 34, 34); font-family: &quot;Open Sans&quot;;\">&nbsp;We’re a multispecialty practice that can provide preventive care, dental implants, gum disease treatment, orthodontics, oral surgery, root canals, and much more in one location. The complete range of dentistry under one roof. In addition to all treatments, we see patients of all ages. Every member of your family. With&nbsp;</span><em style=\"-webkit-font-smoothing: antialiased; color: rgb(34, 34, 34); font-family: &quot;2&quot;, &quot;Helvetica Neue&quot;, sans-serif;\"><span style=\"font-family: &quot;Open Sans&quot;;\">well over a century</span></em><span style=\"color: rgb(34, 34, 34); font-family: &quot;Open Sans&quot;;\">&nbsp;of combined experience, years of diverse, advanced training, and ongoing education in the latest techniques and technologies, our team is the only “dentist” you’ll ever need.</span><br></p>');
+(1, 'Know More About Pipo Esthetique Dental Center', '1719237046.png', '<p><font color=\"#222222\" face=\"Open Sans\">Pipo Esthetique Dental Center</font><span style=\"color: rgb(34, 34, 34); font-family: &quot;Open Sans&quot;;\">&nbsp;isn’t just another place to see a dentist in Laguna.</span><span style=\"color: rgb(34, 34, 34); font-family: &quot;Open Sans&quot;;\">&nbsp;We’re a multispecialty practice that can provide preventive care, dental implants, gum disease treatment, orthodontics, oral surgery, root canals, and much more in one location. The complete range of dentistry under one roof. In addition to all treatments, we see patients of all ages. Every member of your family. With&nbsp;</span><em style=\"-webkit-font-smoothing: antialiased; color: rgb(34, 34, 34); font-family: &quot;2&quot;, &quot;Helvetica Neue&quot;, sans-serif;\"><span style=\"font-family: &quot;Open Sans&quot;;\">well over a century</span></em><span style=\"color: rgb(34, 34, 34); font-family: &quot;Open Sans&quot;;\">&nbsp;of combined experience, years of diverse, advanced training, and ongoing education in the latest techniques and technologies, our team is the only “dentist” you’ll ever need.</span><br></p>');
 
 -- --------------------------------------------------------
 
@@ -66,6 +66,13 @@ CREATE TABLE `featured` (
   `description` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `featured`
+--
+
+INSERT INTO `featured` (`id`, `dentist_id`, `description`, `image`) VALUES
+(19, '182', 'dfsf', '1719239765.png');
 
 -- --------------------------------------------------------
 
@@ -121,6 +128,32 @@ CREATE TABLE `health_declaration` (
   `patient_id` bigint(20) NOT NULL,
   `answer` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `health_declaration`
+--
+
+INSERT INTO `health_declaration` (`id`, `question_id`, `patient_id`, `answer`) VALUES
+(2976, 3, 248, 'Yes'),
+(2977, 4, 248, 'No'),
+(2978, 5, 248, 'Yes'),
+(2979, 6, 248, 'Yes'),
+(2980, 7, 248, 'Yes'),
+(2981, 8, 248, 'No'),
+(2982, 9, 248, 'No'),
+(2983, 10, 248, 'Yes'),
+(2984, 11, 248, 'Yes'),
+(2985, 12, 248, 'No'),
+(2986, 3, 247, 'No'),
+(2987, 4, 247, 'Yes'),
+(2988, 5, 247, 'No'),
+(2989, 6, 247, 'No'),
+(2990, 7, 247, 'No'),
+(2991, 8, 247, 'Yes'),
+(2992, 9, 247, 'No'),
+(2993, 10, 247, 'Yes'),
+(2994, 11, 247, 'Yes'),
+(2995, 12, 247, 'Yes');
 
 -- --------------------------------------------------------
 
@@ -188,18 +221,32 @@ CREATE TABLE `payments` (
   `id` int(11) NOT NULL,
   `patient_id` bigint(20) NOT NULL,
   `app_id` bigint(20) NOT NULL,
-  `payer_id` varchar(50) NOT NULL,
+  `payer_id` varchar(50) DEFAULT NULL,
   `ref_id` varchar(255) NOT NULL,
   `payment_status` varchar(20) NOT NULL,
   `amount` double(10,2) NOT NULL,
-  `currency` varchar(10) NOT NULL,
-  `txn_id` varchar(50) NOT NULL,
-  `payer_email` varchar(100) NOT NULL,
-  `first_name` varchar(50) NOT NULL,
-  `last_name` varchar(50) NOT NULL,
-  `method` varchar(20) NOT NULL DEFAULT 'Paypal',
+  `currency` varchar(10) DEFAULT NULL,
+  `txn_id` varchar(50) DEFAULT NULL,
+  `payer_email` varchar(100) DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `method` varchar(20) NOT NULL DEFAULT '',
   `created_at` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`id`, `patient_id`, `app_id`, `payer_id`, `ref_id`, `payment_status`, `amount`, `currency`, `txn_id`, `payer_email`, `first_name`, `last_name`, `method`, `created_at`) VALUES
+(19, 245, 499, NULL, 'UXHQRBKTZF5A', 'Completed', 1000.00, NULL, NULL, NULL, NULL, NULL, 'Paypal', '2024-07-22 08:21:23'),
+(20, 245, 500, NULL, 'JNFBRD1LUKPE', 'Completed', 2000.00, NULL, NULL, NULL, NULL, NULL, '', '2024-07-22 08:23:59'),
+(21, 245, 501, NULL, 'YXRKKZ649FYS', 'Completed', 2000.00, NULL, NULL, NULL, NULL, NULL, 'cash', '2024-07-22 08:25:39'),
+(22, 248, 502, NULL, '7U2WQLMIOAGV', 'Completed', 2000.00, NULL, NULL, NULL, NULL, NULL, 'cash', '2024-07-22 08:26:44'),
+(23, 245, 503, NULL, 'CGZPPCF7KQNG', 'Completed', 0.00, NULL, NULL, NULL, NULL, NULL, 'cash', '2024-07-22 08:29:27'),
+(24, 245, 504, NULL, 'MVXYHQFJMNRZ', 'Completed', 0.00, NULL, NULL, NULL, NULL, NULL, 'cash', '2024-07-22 08:35:06'),
+(25, 245, 505, NULL, 'T9YNTN6G4W2V', 'Completed', 1800.00, NULL, NULL, NULL, NULL, NULL, 'cash', '2024-07-22 08:38:00'),
+(26, 245, 506, NULL, 'ZTPQZG8IPKBL', 'Completed', 2000.00, NULL, NULL, NULL, NULL, NULL, 'cash', '2024-07-22 08:38:54');
 
 -- --------------------------------------------------------
 
@@ -265,8 +312,8 @@ INSERT INTO `procedures` (`id`, `service_id`, `procedures`, `price`) VALUES
 (30, 10, 'Restoration', '0'),
 (31, 10, 'Extraction', '0'),
 (32, 10, 'Temporary Filling', '0'),
-(34, 5, 'Composite', '0'),
-(35, 3, 'Dental Braces ', '1000');
+(34, 5, 'Composite', '2,000'),
+(35, 3, 'Dental Braces ', '1,000');
 
 -- --------------------------------------------------------
 
@@ -310,6 +357,13 @@ CREATE TABLE `reviews` (
   `image` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `name`, `designation`, `review`, `status`, `image`) VALUES
+(17, 'Reed Prince', 'Aliquam corporis vol', 'Sint minima ut volup', 'Active', '1719239628.png');
+
 -- --------------------------------------------------------
 
 --
@@ -331,7 +385,9 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`id`, `doc_id`, `doc_name`, `day`, `starttime`, `endtime`, `duration`) VALUES
-(112, 182, 'Vincent Calayan', '2023-03-11', '8:00 AM', '4:00 PM', '45');
+(112, 182, 'Vincent Calayan', '2023-03-11', '8:00 AM', '4:00 PM', '45'),
+(114, 182, 'Vincent Calayan', '2024-07-23', '9:00 AM', '4:00 PM', '30'),
+(115, 185, 'Ori Moss', '2024-07-23', '9:00 AM', '3:00 PM', '30');
 
 -- --------------------------------------------------------
 
@@ -357,7 +413,8 @@ INSERT INTO `services` (`id`, `title`, `article_title`, `description`, `image`) 
 (6, 'Oral Prophylaxis', 'What is Oral Prophylaxis?', '<p class=\"brz-mb-xs-15 brz-tp-paragraph brz-text-xs-center brz-mb-lg-20\" style=\"margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding: 0px; line-height: 1.6em;\"><span class=\"brz-cp-color1\" style=\"margin-top: 0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px; line-height: inherit; display: inline; font-family: &quot;Open Sans&quot;; font-size: 14px;\">Oral prophylaxis&nbsp;is a dental procedure that is performed to help reduce the risk of gum and tooth disease. Also known simply as prophylaxis or&nbsp;prophy, this dental procedure is recommended to</span><span style=\"font-size: 14px; font-family: &quot;Open Sans&quot;;\">﻿</span><span class=\"brz-cp-color1\" style=\"margin-top: 0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px; line-height: inherit; display: inline; font-family: &quot;Open Sans&quot;; font-size: 14px;\"> be taken every six months or yearly, depending on a patient’s history.</span></p><p class=\"brz-mb-xs-15 brz-tp-paragraph brz-text-xs-center brz-mb-lg-20\" style=\"margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding: 0px; line-height: 1.6em;\"><span style=\"font-family: &quot;Open Sans&quot;; font-size: 14px;\">During dental prophylaxis, your dentist will also inspect your teeth and jaw for any obvious signs of ill health. This inspection may reveal underlying medical issues such as receding gums, erupting wisdom teeth, dental cavities, or even oral cancer – some of which will require immediate treatment. Early identification of dental problems can help you deal with them before they become serious.</span><br></p>', '1658240233.jpg'),
 (8, 'Oral Surgery (Minor Surgery)', 'What is Oral Surgery?', '<p style=\"margin-right: 0px; margin-bottom: 10.5px; margin-left: 0px; color: rgb(51, 51, 51); font-family: &quot;Source Sans Pro&quot;, Calibri, Candara, Arial, sans-serif;\"><span style=\"font-family: &quot;Open Sans&quot;;\">﻿</span><span style=\"font-size: 14px;\">﻿</span><span style=\"font-family: &quot;Open Sans&quot;;\">You can expect our team of dentists to be very gentle but thorough with every surgical process. From simple extractions to complex treatments like frenectomy, where tissue is removed to prepare for dentures or braces, patients can be assured of great comfort during surgery as well as long-term enhancement of oral functions.</span></p><ul style=\"margin-bottom: 10.5px; color: rgb(51, 51, 51); font-family: &quot;Source Sans Pro&quot;, Calibri, Candara, Arial, sans-serif;\"><li><span style=\"font-family: &quot;Open Sans&quot;;\">Simple Extraction</span></li><li><span style=\"font-family: &quot;Open Sans&quot;;\">Odontectomy (Wisdom Tooth Removal)</span></li><li><span style=\"font-family: &quot;Open Sans&quot;;\">Apicoectomy</span></li><li><span style=\"font-family: &quot;Open Sans&quot;;\">Alveolectomy/Alveoplasty (Removal or Trimming of Ridge)</span></li><li><span style=\"font-family: &quot;Open Sans&quot;;\">Frenectomy</span></li><li><span style=\"font-family: &quot;Open Sans&quot;;\">Torus Palatinus/Mandibularis</span></li></ul>', '1658240241.jpg'),
 (9, 'Cosmetic Dentistry', 'What is Cosmetic Dentistry?', '<p style=\"margin-right: 0px; margin-bottom: 10.5px; margin-left: 0px; color: rgb(51, 51, 51); font-family: &quot;Source Sans Pro&quot;, Calibri, Candara, Arial, sans-serif;\"><span style=\"font-size: 14px;\">﻿</span><span style=\"font-family: &quot;Open Sans&quot;;\">﻿</span><span style=\"font-size: 14px;\">﻿</span><span style=\"font-family: &quot;Open Sans&quot;;\">We promise you a smile makeover that goes beyond improving how your teeth and gums function. Ever wonder how actors and actresses have gotten that picture-perfect teeth? At PUP Taguig Dental Clinic, you can now also enjoy quality cosmetic treatments that they get. Our services involve whitening, teeth reshaping, bonding, porcelain veneers (laminates), crowns (caps), and gum grafts, among others. We can also restore decayed teeth to their original form and function.</span></p><p style=\"margin-right: 0px; margin-bottom: 10.5px; margin-left: 0px; color: rgb(51, 51, 51); font-family: &quot;Source Sans Pro&quot;, Calibri, Candara, Arial, sans-serif;\"><span style=\"font-family: &quot;Open Sans&quot;;\">Our all-porcelain/ceramic crowns mimic the appearance of natural teeth. Materials used for both are 100% biocompatible, metal-free, hypoallergenic, translucent, and natural-looking, without the unsightly dark gumlines. Zirconia crowns and bridges can also be used instead. The clinic utilizes E-max and Empress Systems for such treatments.</span></p>', '1658240252.jpg'),
-(10, 'Restorative Treatment', 'What is Restorative Treatment?', '<p class=\"brz-mb-xs-15 brz-tp-paragraph brz-text-xs-center brz-mb-lg-20\" style=\"margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding: 0px; line-height: 1.6em;\"><span style=\"font-family: &quot;Open Sans&quot;; font-size: 14px;\">﻿</span><span class=\"brz-cp-color1\" style=\"margin-top: 0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px; line-height: inherit; display: inline; font-family: &quot;Open Sans&quot;;\">A dental filling or also known as pasta is a way to restore a tooth damaged by decay back to its normal function and shape. When a dentist gives you a filling, he or she first removes the decayed tooth material, cleans the affected area, and then fills the cleaned out cavity with a filling material.</span></p><p class=\"brz-mb-xs-15 brz-tp-paragraph brz-text-xs-center brz-mb-lg-20\" style=\"margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding: 0px; line-height: 1.6em;\"><span class=\"brz-cp-color1\" style=\"margin-top: 0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px; line-height: inherit; display: inline; font-family: &quot;Open Sans&quot;;\">Fillings are also used to repair cracked or broken teeth and teeth that have been worn down from misuse such as from nail-biting or tooth grinding. The dentist will tell you what type of restorative material will be used depending on the case of your tooth.</span></p>', '1658240271.jpg');
+(10, 'Restorative Treatment', 'What is Restorative Treatment?', '<p class=\"brz-mb-xs-15 brz-tp-paragraph brz-text-xs-center brz-mb-lg-20\" style=\"margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding: 0px; line-height: 1.6em;\"><span style=\"font-family: &quot;Open Sans&quot;; font-size: 14px;\">﻿</span><span class=\"brz-cp-color1\" style=\"margin-top: 0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px; line-height: inherit; display: inline; font-family: &quot;Open Sans&quot;;\">A dental filling or also known as pasta is a way to restore a tooth damaged by decay back to its normal function and shape. When a dentist gives you a filling, he or she first removes the decayed tooth material, cleans the affected area, and then fills the cleaned out cavity with a filling material.</span></p><p class=\"brz-mb-xs-15 brz-tp-paragraph brz-text-xs-center brz-mb-lg-20\" style=\"margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding: 0px; line-height: 1.6em;\"><span class=\"brz-cp-color1\" style=\"margin-top: 0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px; line-height: inherit; display: inline; font-family: &quot;Open Sans&quot;;\">Fillings are also used to repair cracked or broken teeth and teeth that have been worn down from misuse such as from nail-biting or tooth grinding. The dentist will tell you what type of restorative material will be used depending on the case of your tooth.</span></p>', '1658240271.jpg'),
+(31, 'Root Canal Treatment', 'What is Root Canal Treatment?', '<p><strong>Welcome to Pipo Esthetique Dental Care</strong></p><p>At Pipo Esthetique Dental Care, we are dedicated to providing comprehensive dental services to help you achieve a healthy and beautiful smile. Our team of experienced dental professionals is committed to delivering personalized care using the latest technology and techniques. Explore our range of services designed to meet all your dental needs.</p><p>&nbsp;</p><p><span class=\"ui-provider a b c d e f g h i j k l m n o p q r s t u v w x y z ab ac ae af ag ah ai aj ak\" dir=\"ltr\"></span></p><p>Save your natural teeth with our expert root canal treatment. When the pulp of a tooth becomes infected or damaged, root canal therapy can remove the infection and restore the tooths health. Our gentle and precise approach ensures minimal discomfort and a high success rate, allowing you to retain your natural teeth and avoid extraction.</p>', '1719238690.png');
 
 -- --------------------------------------------------------
 
@@ -406,7 +463,7 @@ CREATE TABLE `system_details` (
 --
 
 INSERT INTO `system_details` (`id`, `name`, `days`, `openhr`, `closehr`, `address`, `telno`, `email`, `mobile`, `facebook`, `map`, `logo`, `brand`) VALUES
-(1, 'System Title', '2,3,4,5,6', '8:00 AM', '6:00 PM', 'System Address', '+639952350999', 'feliztoothdev@gmail.com', '+639952350999', 'https://www.facebook.com', 'https://goo.gl/maps/AJx8wi8tU4TNuNh16', '1678434994.png', '1678434983.png');
+(1, 'System Title', '2,3,4,5,6', '8:00 AM', '6:00 PM', 'System Address', '+639952350999', 'feliztoothdev@gmail.com', '+639952350999', 'https://www.facebook.com', 'https://maps.app.goo.gl/juoq3HkzrbH25rLHA', '1678434994.png', '1678434983.png');
 
 -- --------------------------------------------------------
 
@@ -434,7 +491,8 @@ CREATE TABLE `tbladmin` (
 --
 
 INSERT INTO `tbladmin` (`id`, `name`, `address`, `phone`, `email`, `image`, `password`, `role`, `status`, `verify_token`, `verify_status`, `created_at`) VALUES
-(52, 'admin', 'Sequi eum quia ducim', '+639999999999', 'admin@gmail.com', '1678435022.png', '$2y$10$ovSBMnrKAE/MENpdZpVMe.Xf/qeZeldHbdL5NP.10gNwe/rtmMJgi', 'admin', 1, '', 1, '2022-11-02 05:49:00');
+(52, 'admin', 'Sequi eum quia ducim', '+639999999999', 'admin@gmail.com', '1678435022.png', '$2y$10$ovSBMnrKAE/MENpdZpVMe.Xf/qeZeldHbdL5NP.10gNwe/rtmMJgi', 'admin', 1, '', 1, '2022-11-02 05:49:00'),
+(53, 'Quinn Wheeler', 'Aut ut quia Nam dolo', '+639999999999', 'jahetoso@mailinator.com', '1719240497.png', '$2y$10$ZSABnp972iHKOez3783naOiTQZXAGi3RcWLXn2dp5LZ0ZHFioBqBS', 'admin', 0, '', 0, '2024-06-24 22:48:17');
 
 -- --------------------------------------------------------
 
@@ -466,7 +524,9 @@ CREATE TABLE `tblappointment` (
 --
 
 INSERT INTO `tblappointment` (`id`, `patient_id`, `patient_name`, `doc_id`, `schedule`, `starttime`, `endtime`, `sched_id`, `schedtype`, `reason`, `seen_status`, `status`, `payment`, `payment_option`, `bgcolor`, `created_at`) VALUES
-(454, 245, 'demo patient', 182, '2023-03-11', '08:00 AM', '08:45 AM', 112, 'Walk-in Schedule', 'Cleaning,Composite', 0, 'Treated', 0, '', '#f39c12', '2023-03-10 16:01:42');
+(478, 247, 'Bernard Swanson Chava Walsh', 182, '2024-07-23', '09:00 AM', '09:30 AM', 114, 'Online Schedule', 'Cleaning', 0, 'Pending', 0, 'paypal', '', '2024-07-22 06:49:19'),
+(505, 245, 'demo patient', 182, '2024-07-23', '09:30 AM', '10:00 AM', 114, 'Walk-in Schedule', 'Composite', 0, 'Confirmed', 1, 'cash', '#f39c12', '2024-07-22 08:38:00'),
+(506, 245, 'demo patient', 182, '2024-07-23', '10:00 AM', '10:30 AM', 114, 'Walk-in Schedule', 'Composite', 0, 'Confirmed', 1, 'cash', '#f39c12', '2024-07-22 08:38:54');
 
 -- --------------------------------------------------------
 
@@ -498,7 +558,9 @@ CREATE TABLE `tbldoctor` (
 --
 
 INSERT INTO `tbldoctor` (`id`, `name`, `dob`, `address`, `gender`, `phone`, `email`, `degree`, `specialty`, `image`, `password`, `role`, `status`, `verify_token`, `verify_status`, `created_at`) VALUES
-(182, 'Vincent Calayan', '01/31/1990', '56 East First Court', 'Male', '+639558308223', 'hugyh@gmail.com', 'Adipisicing nihil ex', 'Ut et animi molesti', '1678435221.png', '$2y$10$IETknIKiNzgrAafSwn3hy.ub6xo99qZLltmUIb6A610mW4NBa8uC2', '2', 1, '', 0, '2023-03-10 16:00:21');
+(182, 'Vincent Calayan', '01/31/1990', '56 East First Court', 'Male', '+639558308223', 'hugyh@gmail.com', 'Adipisicing nihil ex', 'Ut et animi molesti', '1678435221.png', '$2y$10$IETknIKiNzgrAafSwn3hy.ub6xo99qZLltmUIb6A610mW4NBa8uC2', '2', 1, '', 0, '2023-03-10 16:00:21'),
+(184, 'Malcolm Mercer', '02/02/2010', 'Quibusdam rerum veni', 'Female', '+639999999999', 'jifigiri@mailinator.com', 'Est et voluptates u', 'In id quam eius qui', '1719240105.png', '$2y$10$eEh0A/EMPlwfC4NqEpXbUemhww.//dnSYqn1VubaRP8yOPxQBeXj.', '2', 1, '', 0, '2024-06-24 22:41:45'),
+(185, 'Ori Moss', '02/01/2000', 'Nemo consequatur po', 'Others', '+639999999999', 'tukygapusu@mailinator.com', 'Voluptatum sed totam', 'Quibusdam dolor ea q', '1721608954.png', '$2y$10$uB9GsstYE3W/rOG4x8ZucuGSDH8NuBAUN7C/qnVAbMIhi9GjHij2u', '2', 1, '', 0, '2024-07-22 08:42:34');
 
 -- --------------------------------------------------------
 
@@ -514,6 +576,7 @@ CREATE TABLE `tblpatient` (
   `dob` varchar(50) NOT NULL,
   `gender` varchar(50) NOT NULL,
   `phone` varchar(20) NOT NULL,
+  `card` tinyint(4) NOT NULL DEFAULT 0,
   `email` varchar(100) NOT NULL,
   `image` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -527,8 +590,11 @@ CREATE TABLE `tblpatient` (
 -- Dumping data for table `tblpatient`
 --
 
-INSERT INTO `tblpatient` (`id`, `fname`, `lname`, `address`, `dob`, `gender`, `phone`, `email`, `image`, `password`, `role`, `verify_token`, `verify_status`, `created_at`) VALUES
-(245, 'demo', 'patient', '#81 Maginhawa Teachers Village Quezon City', '11/18/2002', 'Female', '+639762553652', 'pipopatient@gmail.com', '1678435139.png', '$2y$10$eoD.N1GihAtDbgLLvf4BzevDyJzJjh.cQtzqvQRNZsGFlvCbMNE8y', 'patient', '', 0, '2023-03-10 15:58:22');
+INSERT INTO `tblpatient` (`id`, `fname`, `lname`, `address`, `dob`, `gender`, `phone`, `card`, `email`, `image`, `password`, `role`, `verify_token`, `verify_status`, `created_at`) VALUES
+(245, 'demo', 'patient', '#81 Maginhawa Teachers Village Quezon City', '11/18/2002', 'Female', '+639762553652', 1, 'pipopatient@gmail.com', '1678435139.png', '$2y$10$eoD.N1GihAtDbgLLvf4BzevDyJzJjh.cQtzqvQRNZsGFlvCbMNE8y', 'patient', '', 0, '2023-03-10 15:58:22'),
+(247, 'Bernard Swanson', 'Chava Walsh', 'Et qui incidunt con', '06/06/2000', 'Female', '+639999999999', 0, 'wanetoh@mailinator.com', '1719241481.png', '$2y$10$D2Bym7Rv.jW0Br1ZwfUYcueYZPXmNrVMvEap117PKPolgs1rBWWKK', 'patient', '', 1, '2024-06-24 23:04:41'),
+(248, 'Kim', 'Hopkins', 'Quis ut maiores quo ', '03/10/2004', 'Female', '+639999999999', 0, 'jekixirulu@mailinator.com', '1720634021.png', '$2y$10$6KZn/v.ASTqI.GXFdhjKxOiZDGhhmFP7sg7xSEze/ZYyfnxf5KCma', 'patient', '', 1, '2024-07-11 01:53:41'),
+(249, 'Cullen Ochoa', 'Mara Robinson', 'Numquam harum esse ', '05/24/1993', 'Female', '+639999999999', 0, 'duhifywa@mailinator.com', '1721562327.png', '$2y$10$8nRLmpbBjLwzke/m3kLXUeQ3U06dNu.Bnue/ReQpfwehgETFD3qTS', 'patient', '', 1, '2024-07-21 19:45:26');
 
 -- --------------------------------------------------------
 
@@ -553,6 +619,13 @@ CREATE TABLE `tblstaff` (
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `tblstaff`
+--
+
+INSERT INTO `tblstaff` (`id`, `name`, `dob`, `address`, `gender`, `phone`, `email`, `image`, `password`, `role`, `status`, `verify_token`, `verify_status`, `created_at`) VALUES
+(29, 'Sara Durham', '02/01/2000', 'Qui minim facilis al', 'Male', '+639999999999', 'syki@mailinator.com', '1721609073.png', '$2y$10$f8ckyEGHHdaKDEHKvuos0uz47bG/s2FyzBZO4b1IAM0rfoeifj1Va', '3', 1, '', 0, '2024-07-22 08:44:33');
+
 -- --------------------------------------------------------
 
 --
@@ -574,13 +647,6 @@ CREATE TABLE `treatment` (
   `remarks` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `treatment`
---
-
-INSERT INTO `treatment` (`id`, `appointment_id`, `patient_id`, `doc_id`, `visit`, `teeth`, `complaint`, `treatment`, `fees`, `file_name`, `uploaded_on`, `remarks`, `created_at`) VALUES
-(95, 454, 245, 182, '112', '', '', 'Cleaning,Composite', '', NULL, NULL, '', '2023-03-10 08:02:48');
 
 -- --------------------------------------------------------
 
@@ -605,7 +671,7 @@ CREATE TABLE `users` (
 --
 DROP TABLE IF EXISTS `users`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `users`  AS SELECT `tbladmin`.`id` AS `id`, `tbladmin`.`name` AS `name`, `tbladmin`.`email` AS `email`, `tbladmin`.`role` AS `role`, `tbladmin`.`status` AS `status`, `tbladmin`.`password` AS `password`, `tbladmin`.`verify_token` AS `verify_token` FROM `tbladmin` union all select `tblstaff`.`id` AS `id`,`tblstaff`.`name` AS `name`,`tblstaff`.`email` AS `email`,`tblstaff`.`role` AS `role`,`tblstaff`.`status` AS `status`,`tblstaff`.`password` AS `password`,`tblstaff`.`verify_token` AS `verify_token` from `tblstaff` union all select `tblpatient`.`id` AS `id`,concat(`tblpatient`.`fname`,' ',`tblpatient`.`lname`) AS `name`,`tblpatient`.`email` AS `email`,`tblpatient`.`role` AS `role`,`tblpatient`.`verify_status` AS `status`,`tblpatient`.`password` AS `password`,`tblpatient`.`verify_token` AS `verify_token` from `tblpatient` union all select `tbldoctor`.`id` AS `id`,`tbldoctor`.`name` AS `name`,`tbldoctor`.`email` AS `email`,`tbldoctor`.`role` AS `role`,`tbldoctor`.`status` AS `status`,`tbldoctor`.`password` AS `password`,`tbldoctor`.`verify_token` AS `verify_token` from `tbldoctor`  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `users`  AS SELECT `tbladmin`.`id` AS `id`, `tbladmin`.`name` AS `name`, `tbladmin`.`email` AS `email`, `tbladmin`.`role` AS `role`, `tbladmin`.`status` AS `status`, `tbladmin`.`password` AS `password`, `tbladmin`.`verify_token` AS `verify_token` FROM `tbladmin`union all select `tblstaff`.`id` AS `id`,`tblstaff`.`name` AS `name`,`tblstaff`.`email` AS `email`,`tblstaff`.`role` AS `role`,`tblstaff`.`status` AS `status`,`tblstaff`.`password` AS `password`,`tblstaff`.`verify_token` AS `verify_token` from `tblstaff` union all select `tblpatient`.`id` AS `id`,concat(`tblpatient`.`fname`,' ',`tblpatient`.`lname`) AS `name`,`tblpatient`.`email` AS `email`,`tblpatient`.`role` AS `role`,`tblpatient`.`verify_status` AS `status`,`tblpatient`.`password` AS `password`,`tblpatient`.`verify_token` AS `verify_token` from `tblpatient` union all select `tbldoctor`.`id` AS `id`,`tbldoctor`.`name` AS `name`,`tbldoctor`.`email` AS `email`,`tbldoctor`.`role` AS `role`,`tbldoctor`.`status` AS `status`,`tbldoctor`.`password` AS `password`,`tbldoctor`.`verify_token` AS `verify_token` from `tbldoctor`  ;
 
 --
 -- Indexes for dumped tables
@@ -798,7 +864,7 @@ ALTER TABLE `dental_history`
 -- AUTO_INCREMENT for table `featured`
 --
 ALTER TABLE `featured`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `gallery`
@@ -816,7 +882,7 @@ ALTER TABLE `header`
 -- AUTO_INCREMENT for table `health_declaration`
 --
 ALTER TABLE `health_declaration`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2856;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2996;
 
 --
 -- AUTO_INCREMENT for table `mail_settings`
@@ -834,13 +900,13 @@ ALTER TABLE `medical_record`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=549;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=552;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `payment_settings`
@@ -864,25 +930,25 @@ ALTER TABLE `procedures`
 -- AUTO_INCREMENT for table `questionnaires`
 --
 ALTER TABLE `questionnaires`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `sms_settings`
@@ -900,31 +966,31 @@ ALTER TABLE `system_details`
 -- AUTO_INCREMENT for table `tbladmin`
 --
 ALTER TABLE `tbladmin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `tblappointment`
 --
 ALTER TABLE `tblappointment`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=455;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=507;
 
 --
 -- AUTO_INCREMENT for table `tbldoctor`
 --
 ALTER TABLE `tbldoctor`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=183;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=186;
 
 --
 -- AUTO_INCREMENT for table `tblpatient`
 --
 ALTER TABLE `tblpatient`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=250;
 
 --
 -- AUTO_INCREMENT for table `tblstaff`
 --
 ALTER TABLE `tblstaff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `treatment`
