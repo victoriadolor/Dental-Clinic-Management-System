@@ -97,6 +97,7 @@ $(document).ready(function() {
       if ($(this).is(':checked')) {
         $('#scannerMessage').removeClass('hidden');
         stopLoadUID = false; // Reset the flag
+        $('#confirm-btn').prop('disabled', true);
 
         setTimeout(function() {
           loadUID(); // Start the scanning process after delay
@@ -104,6 +105,7 @@ $(document).ready(function() {
       } else {
           $('#scannerMessage').addClass('hidden');
           $('#discountMessage').html(''); // Clear discount message
+          $('#confirm-btn').prop('disabled', false);
 
           // Revert the total amount to original (non-discounted)
           $('#totalAmountDisplay').text(`₱ ${totalAmount.toFixed(2)}`);
@@ -139,6 +141,7 @@ $(document).ready(function() {
 
                   // Show discount message
                   $('#discountMessage').html('<span class="small font-italic text-primary">A 10% discount has been applied.</span>');
+                  $('#confirm-btn').prop('disabled', false);
                 });
                 stopLoadUID = true; // Set the flag to stop calling loadUID
               }, 2000); // 2000 milliseconds = 2 seconds
