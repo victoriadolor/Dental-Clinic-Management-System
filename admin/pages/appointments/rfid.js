@@ -31,6 +31,7 @@ $(document).ready(function() {
   $('#add-appointment-form').on('submit', function(e) {
     e.preventDefault();
 
+    $('#confirm-btn').prop('disabled', false);
     var doctor = $('#preferredDentist').select2('data')[0].text;
     var date = $('#preferredDate').select2('data')[0].text;
     var time = $('#preferredTime').select2('data')[0].text;
