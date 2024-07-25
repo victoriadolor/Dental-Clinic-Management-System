@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
   var table1 = $("#apptmttbl").DataTable({
     dom:
@@ -883,84 +884,6 @@ $(document).ready(function () {
       return false;
     }
   });
-  $('#add-appointment-form').on('submit', function (e) {
-    e.preventDefault();
-    var services = [];
-    var totalAmount = 0;
-    $('#service').select2('data').forEach(function(service) {
-        var priceString = $(service.element).data('price'); 
-        priceString = priceString.toString(); 
-        
-        var priceNumber = parseFloat(priceString.replace(',', '')); 
-        
-        services.push({
-            name: service.text,
-            price: priceNumber
-        });
-        totalAmount += priceNumber; 
-    });
-    $('#totalAmount').val(totalAmount.toFixed(2)); 
-
-    var doctor = $('#preferredDentist').select2('data')[0].text;
-    var date = $('#preferredDate').select2('data')[0].text;
-    var time = $('#preferredTime').select2('data')[0].text;
-
-    var modalContent = `
-<table class="table table-bordered">
-<tr>
-    <th>Doctor:</th>
-    <td>${doctor}</td>
-</tr>
-<tr>
-    <th>Date:</th>
-    <td>${date}</td>
-</tr>
-<tr>
-    <th>Time:</th>
-    <td>${time}</td>
-</tr>
-<tr>
-    <th>Services:</th>
-    <td>
-        <ul>
-            ${services.map(function(service) {
-                return `<li>${service.name}  <span class="float-right">₱ ${service.price}</span></li>`;
-            }).join('')}
-        </ul>
-    </td>
-</tr>
-<tr>
-    <th>Total Amount:</th>
-    <td><strong id="totalAmountDisplay" class="float-right">₱ ${totalAmount.toFixed(2)}</strong></td>
-</tr>
-<tr>
-    <th>Privilege Card:</th>
-    <td>
-        <input type="checkbox" id="privilegeCard" name="privilegeCard"> Use Privilege Card (10% Discount)
-    </td>
-</tr>
-</table>
-<div id="discountMessage" class="text-right mt-2"></div>
-`;
-
-    $('#modal-body').html(modalContent);
-    
-    $('#AddAppointmentModal').modal('hide');
-    $('#appointment-summary-modal').modal('show');
-
-    $('#privilegeCard').on('change', function() {
-        var discountMessage = '';
-        var finalAmount = totalAmount;
-
-        if ($(this).is(':checked')) {
-            finalAmount = totalAmount * 0.90;
-            discountMessage = '<span class="small font-italic text-primary">A 10% discount has been applied.</span>';
-        }
-
-        $('#totalAmountDisplay').text(`₱ ${finalAmount.toFixed(2)}`);
-        $('#discountMessage').html(discountMessage);
-    });
-});
 
 $('#cancel-btn').on('click', function () {
   $('#appointment-summary-modal').modal('hide');
@@ -1011,5 +934,5 @@ $('#confirm-btn').on('click', function() {
   });
 });
 
-
 });
+

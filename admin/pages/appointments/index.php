@@ -5,7 +5,72 @@ include('../../includes/topbar.php');
 include('../../includes/sidebar.php');
 include('../../config/dbconn.php');
 ?>
+<style>
+    .hidden { display: none; }
+    .center { text-align: center; }
+    .validation-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 2s linear infinite;
+      margin: auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .success-message {
+        position: relative;
+        padding: 15px;
+        border: 1px solid #d4edda;
+        border-radius: 5px;
+        background-color: #d4edda;
+        color: #155724;
+        font-size: 1rem;
+        margin-top: 20px;
+        display: none; /* Initially hidden */
+    }
 
+    .success-message, .fail-message {
+        position: relative;
+        padding: 15px;
+        border: 1px solid;
+        border-radius: 5px;
+        background-color: #d4edda;
+        color: #155724;
+        font-size: 1.2rem;
+        margin-top: 20px;
+        display: none; /* Initially hidden */
+    }
+
+    .scanner-message i {
+        /* font-size: 2rem; */
+        margin-right: 10px;
+    }
+
+    .fail-message {
+        border-color: #f8d7da;
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
 
@@ -19,7 +84,9 @@ include('../../config/dbconn.php');
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+          <input type="hidden" name="totalAmount" id="getPriviligeCardId" value="">
           <div class="modal-body" id="modal-body">
+            
             <!-- summary will be displayed here -->
           </div>
           <div class="modal-footer">
@@ -44,7 +111,7 @@ include('../../config/dbconn.php');
           <form id="add-appointment-form">
             <div class="modal-body">
               <div class="row">
-              <input type="hidden" name="insert_appointment" value="1">
+                <input type="hidden" name="insert_appointment" value="1">
                 <input type="hidden" name="totalAmount" id="totalAmount" value="">
                 <div class="col-sm-6">
                   <div class="form-group">
@@ -525,4 +592,5 @@ include('../../config/dbconn.php');
 
   <?php include('../../includes/scripts.php'); ?>
   <script src="appointment.js"></script>
+  <script src="rfid.js"></script>
   <?php include('../../includes/footer.php'); ?>
